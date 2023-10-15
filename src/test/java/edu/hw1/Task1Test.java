@@ -12,7 +12,9 @@ public class Task1Test
     void minValueTest() {
         String time = "00:00";
 
-        assertThat(minutesToSeconds(time)).isEqualTo(0);
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(0);
     }
 
     @Test
@@ -20,7 +22,9 @@ public class Task1Test
     void maxValueTest() {
         String time = "35791394:07";
 
-        assertThat(minutesToSeconds(time)).isEqualTo(Integer.MAX_VALUE);
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(Integer.MAX_VALUE);
     }
 
     @Test
@@ -28,7 +32,9 @@ public class Task1Test
     void maxValueErrorTest() {
         String time = "35791394:08";
 
-        assertThat(minutesToSeconds(time)).isEqualTo(-1);
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(-1);
     }
 
     @Test
@@ -36,7 +42,9 @@ public class Task1Test
     void negativeSeconds() {
         String time = "12:-1";
 
-        assertThat(minutesToSeconds(time)).isEqualTo(-1);
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(-1);
     }
 
     @Test
@@ -44,7 +52,9 @@ public class Task1Test
     void limitSeconds() {
         String time = "12:61";
 
-        assertThat(minutesToSeconds(time)).isEqualTo(-1);
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(-1);
     }
 
     @Test
@@ -52,7 +62,9 @@ public class Task1Test
     void negativeMinutes() {
         String time = "-1:12";
 
-        assertThat(minutesToSeconds(time)).isEqualTo(-1);
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(-1);
     }
 
     @Test
@@ -60,6 +72,8 @@ public class Task1Test
     void simpleTest() {
         String time = "01:40";
 
-        assertThat(minutesToSeconds(time)).isEqualTo(100);
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(100);
     }
 }
