@@ -4,15 +4,28 @@ public class Task7 {
     private Task7() {
     }
 
-    public static int rotateLeft(int n, int shift) {
-        int positionFirstDigit = 0;
-        int number = n;
-        while ((number >> positionFirstDigit) != 0) {
-            positionFirstDigit++;
+    public static int binaryNumberLength(int number) {
+        int length = 0;
+        while ((number >> length) != 0) {
+            length++;
         }
+        return length;
+    }
+
+    public static int rotateLeft(int n, int shift) {
+        int number = n;
+        int positionFirstDigit = binaryNumberLength(n);
         int firstDigit = 1 << positionFirstDigit;
         int firstDigitInvert = ~firstDigit;
-        for (int j = 0; j < shift; j++) {
+
+        if (number == 0) {
+            return number;
+        }
+
+        int shiftChanged = shift;
+        shiftChanged %= positionFirstDigit;
+
+        for (int j = 0; j < shiftChanged; j++) {
             number = number << 1;
             if ((number & firstDigit) != 0) {
                 number = number | 1;
@@ -23,14 +36,18 @@ public class Task7 {
     }
 
     public static int rotateRight(int n, int shift) {
-        int positionFirstDigit = 0;
         int number = n;
-        while ((n >> positionFirstDigit) != 0) {
-            positionFirstDigit++;
-        }
+        int positionFirstDigit = binaryNumberLength(n);
         int firstDigit = 1 << (positionFirstDigit - 1);
 
-        for (int j = 0; j < shift; j++) {
+        if (number == 0) {
+            return number;
+        }
+
+        int shiftChanged = shift;
+        shiftChanged %= positionFirstDigit;
+
+        for (int j = 0; j < shiftChanged; j++) {
             if ((number & 1) == 1) {
                 number >>= 1;
                 number |= firstDigit;

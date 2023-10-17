@@ -90,7 +90,7 @@ public class Task6Test
     @Test
     @DisplayName("Incorrect input - 10000")
     void incorrectInputTest3() {
-        int number = 1111;
+        int number = 10000;
 
         int result = countK(number);
 

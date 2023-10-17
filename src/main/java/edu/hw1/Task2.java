@@ -12,8 +12,7 @@ public class Task2 {
         do {
             count++;
             num /= BASE;
-        }
-        while (num != 0);
+        } while (num != 0);
         return count;
     }
 }

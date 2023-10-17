@@ -7,7 +7,8 @@ public class Task6 {
     public static final int MAX = 9999;
     public static final int MIN = 1000;
     public static final int BASE = 10;
-    public static final int RES = 6174;
+    public static final int ALL_UNITS_NUMBER = 1111;
+    public static final int KAPREKAR_CONST = 6174;
 
     private Task6() {
     }
@@ -26,11 +27,11 @@ public class Task6 {
 
     public static int countK(int number) {
         if ((number > MAX) || (number <= MIN) // последнее условие отвечает, за отсуствие одинаковых цифр
-            || ((number / (BASE * BASE) - number % (BASE * BASE)) == 0)) {
+            || (number % ALL_UNITS_NUMBER == 0)) {
             return -1;
         }
 
-        if (number == RES) {
+        if (number == KAPREKAR_CONST) {
             return 0;
         }
 

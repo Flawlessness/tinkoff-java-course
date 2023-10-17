@@ -7,12 +7,14 @@ public final class Task1 {
     }
 
     public static int minutesToSeconds(String time) {
+        if (!time.matches("\\d+:[0-5]?\\d")) {
+            return -1;
+        }
         String[] dividedTime = time.split(":");
         int minutes = Integer.parseInt(dividedTime[0]);
         int seconds = Integer.parseInt(dividedTime[1]);
 
-        if ((seconds < 0) || (minutes < 0) || (seconds >= SECONDS_IN_MINUTES)
-            || (minutes > (Integer.MAX_VALUE - seconds) / SECONDS_IN_MINUTES)) {
+        if ((minutes > (Integer.MAX_VALUE - seconds) / SECONDS_IN_MINUTES)) {
             return -1;
         }
 

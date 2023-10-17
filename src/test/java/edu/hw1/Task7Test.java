@@ -118,4 +118,24 @@ public class Task7Test
         assertThat(result).isEqualTo(Integer.MAX_VALUE);
     }
 
+    @Test
+    @DisplayName("Random test")
+    void randomTest() {
+        int number = 6;
+        int shift = 37;
+
+        int result = rotateRight(number, shift);
+
+        assertThat(result).isEqualTo(3);
+    }
+    @Test
+    @DisplayName("Large test")
+    void largeTest() {
+        int number = Integer.MAX_VALUE;
+        int shift = Integer.MAX_VALUE;
+
+        int result = rotateRight(number, shift);
+
+        assertThat(result).isEqualTo(Integer.MAX_VALUE);
+    }
 }

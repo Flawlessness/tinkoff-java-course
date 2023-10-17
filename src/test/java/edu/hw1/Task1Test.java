@@ -18,6 +18,16 @@ public class Task1Test
     }
 
     @Test
+    @DisplayName("Format without not significant zero")
+    void notSignificantZeroTest() {
+        String time = "1:1";
+
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(61);
+    }
+
+    @Test
     @DisplayName("Integer.MAX_VALUE = seconds")
     void maxValueTest() {
         String time = "35791394:07";
@@ -76,4 +86,14 @@ public class Task1Test
 
         assertThat(result).isEqualTo(100);
     }
+    @Test
+    @DisplayName("incorrect input: letters")
+    void lettersTest() {
+        String time = "a:40";
+
+        int result = minutesToSeconds(time);
+
+        assertThat(result).isEqualTo(-1);
+    }
+
 }
