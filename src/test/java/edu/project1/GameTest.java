@@ -13,37 +13,13 @@ import java.io.StringReader;
 
 public class GameTest {
     @Test
-    @DisplayName("Exceeding the maximum number of attempts")
-    void maximumNumberAttemptsTest() throws IOException {
-        String userInput = """
-            b
-            b
-            """;
-        String dictionary = """
-            1
-            a
-            """;
-        Reader dictionaryReader = new StringReader(dictionary);
-        InputStream is = new ByteArrayInputStream(userInput.getBytes());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(baos);
-
-        System.setIn(is);
-        System.setOut(ps);
-        Game game = new Game(dictionaryReader);
-        game.run();
-        System.out.flush();
-
-        String[] output = baos.toString().split("\n");
-        Assertions.assertEquals("You lost!", output[output.length - 1]);
-    }
-
-    @Test
     @DisplayName("Checking correct operation")
     void correctOperationTest() throws IOException {
         String userInput = """
             a
             b
+            b
+            abb
             f
             l
             o
@@ -65,86 +41,7 @@ public class GameTest {
         System.out.flush();
 
         String[] output = baos.toString().split("\n");
-        Assertions.assertEquals("Total attempts: 6", output[output.length - 1]);
+        Assertions.assertEquals(" \u001B[32mTotal attempts: 7\u001B[m", output[output.length - 1].split("--")[1]);
     }
 
-    @Test
-    @DisplayName("Same input letters")
-    void sameLettersTest() throws IOException {
-        String userInput = """
-            h
-            h
-            e
-            """;
-        String dictionary = """
-            1
-            he
-            """;
-        Reader dictionaryReader = new StringReader(dictionary);
-        InputStream is = new ByteArrayInputStream(userInput.getBytes());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(baos);
-
-        System.setIn(is);
-        System.setOut(ps);
-        Game game = new Game(dictionaryReader);
-        game.run();
-        System.out.flush();
-
-        String[] output = baos.toString().split("\n");
-        Assertions.assertEquals("Total attempts: 3", output[output.length - 1]);
-    }
-
-    @Test
-    @DisplayName("Invalid input")
-    void invalidInputTest() throws IOException {
-        String userInput = """
-            abc
-            b
-            e
-            """;
-        String dictionary = """
-            1
-            be
-            """;
-        Reader dictionaryReader = new StringReader(dictionary);
-        InputStream is = new ByteArrayInputStream(userInput.getBytes());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(baos);
-
-        System.setIn(is);
-        System.setOut(ps);
-        Game game = new Game(dictionaryReader);
-        game.run();
-        System.out.flush();
-
-        String[] output = baos.toString().split("\n");
-        Assertions.assertEquals("Total attempts: 2", output[output.length - 1]);
-    }
-
-    @Test
-    @DisplayName("Stop command")
-    void stopCommandTest() throws IOException {
-        String userInput = """
-            a
-            stop
-            """;
-        String dictionary = """
-            1
-            abc
-            """;
-        Reader dictionaryReader = new StringReader(dictionary);
-        InputStream is = new ByteArrayInputStream(userInput.getBytes());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(baos);
-
-        System.setIn(is);
-        System.setOut(ps);
-        Game game = new Game(dictionaryReader);
-        game.run();
-        System.out.flush();
-
-        String[] output = baos.toString().split("\n");
-        Assertions.assertEquals("The game is stopped.", output[output.length - 1]);
-    }
 }

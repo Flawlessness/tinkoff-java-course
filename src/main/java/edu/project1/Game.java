@@ -3,8 +3,11 @@ package edu.project1;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Game {
+    private final static Logger LOGGER = LogManager.getLogger();
     private Dictionary dictionary;
     private GameManager gameManager;
     private boolean isGameStopped;
@@ -23,7 +26,7 @@ public class Game {
 
         while (!gameManager.isPlayerWon() && (gameManager.getAttempts() != gameManager.getMaxAttempts())
             && !isGameStopped) {
-            System.out.println("Guess a letter:");
+            LOGGER.info("Guess a letter:");
             command = scanner.nextLine();
             if (!isCharacterEntered(command)) {
                 continue;
@@ -32,24 +35,24 @@ public class Game {
             hit = gameManager.guess(enteredLetter);
 
             if (hit) {
-                System.out.println("Hit!");
+                LOGGER.info("Hit!");
             } else {
-                System.out.printf(
-                    "Missed, mistake %d out of %d.\n",
+                LOGGER.info(
+                    "Missed, mistake {} out of {}.",
                     gameManager.getAttempts(),
                     gameManager.getMaxAttempts()
                 );
             }
-            System.out.printf("The word: %s\n", gameManager.getUserAnswer());
+            LOGGER.info("The word: {}", gameManager.getUserAnswer());
         }
         if (isGameStopped) {
-            System.out.println("The game is stopped.");
+            LOGGER.info("The game is stopped.");
         } else {
             if (gameManager.isPlayerWon()) {
-                System.out.println("You won!");
-                System.out.printf("Total attempts: %d\n", gameManager.getAttempts());
+                LOGGER.info("You won!");
+                LOGGER.info("Total attempts: {}", gameManager.getAttempts());
             } else {
-                System.out.println("You lost!");
+                LOGGER.info("You lost!");
             }
 
         }
