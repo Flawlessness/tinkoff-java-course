@@ -21,38 +21,37 @@ public record CommandExecutor(ConnectionManager connectionManager, int maxAttemp
     }
 
     private void tryExecute(String command) throws ConnectionException {
-        boolean connectionEstablished = false;
-        boolean commandExecuted = false;
-        try (Connection connection = connectionManager.getConnection()) {
-            connectionEstablished = true;
+        Connection connection = null;
+        try {
+            connection = connectionManager.getConnection();
             for (int i = 0; i < maxAttempts; ++i) {
-                boolean exceptionOccurred = false;
                 try {
                     connection.execute(command);
-                } catch (ConnectionException e) {
-                    exceptionOccurred = true;
-                }
-
-                if (!exceptionOccurred) {
-                    commandExecuted = true;
                     return;
+                } catch (ConnectionException e) {
+                    if (i == maxAttempts - 1) {
+                        throw e;
+                    }
                 }
             }
+            throw new ConnectionException("Failed to execute command.");
+        } catch (ConnectionException e) {
+            // re-throw already occurred connection-related exceptions
+            throw e;
         } catch (Exception e) {
-            if (!connectionEstablished) {
-                String exceptionMessage = "Could not establish connection.";
-                LOGGER.info(exceptionMessage);
-                throw new ConnectionException(exceptionMessage, e);
-            } else {
-
-                String exceptionMessage = "Could not close the connection.";
-                LOGGER.info(exceptionMessage);
-                throw new ConnectionException(exceptionMessage, e);
+            if (connection == null) {
+                throw new ConnectionException("Could not establish connection.");
+            }
+            throw new ConnectionException("Unexpected exception has occurred while executing command.", e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                //noinspection ThrowFromFinallyBlock
+                throw new ConnectionException("Unexpected exception has occurred while closing connection.", e);
             }
         }
-
-        String exceptionMessage = "Could not execute command \"" + command + "\".";
-        LOGGER.info(exceptionMessage);
-        throw new ConnectionException(exceptionMessage);
     }
 }
