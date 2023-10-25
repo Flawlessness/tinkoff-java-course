@@ -93,4 +93,17 @@ public class GameTest {
         assertThat(gameManager.isPlayerWon()).isEqualTo(false);
         assertThat(gameManager.getAttempts()).isEqualTo(randomWord.length()*2);
     }
+
+    @Test
+    @DisplayName("Checking that the game is stopped by the \"stop\" command")
+    void stopGameTest() {
+        String randomWord = "a";
+        GameManager gameManager = new GameManager(randomWord, randomWord.length());
+
+        gameManager.guess("b");
+        gameManager.guess("stop");
+
+        assertThat(gameManager.isGameStopped()).isEqualTo(true);
+    }
+
 }
