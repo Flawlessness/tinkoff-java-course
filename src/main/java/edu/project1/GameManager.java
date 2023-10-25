@@ -8,6 +8,7 @@ public class GameManager {
     private int attempts;
     private final char[] userAnswer;
     private int countKnownSymbols;
+    private boolean gameStopped;
 
     public GameManager(String answer, int answerLength) {
         this.answerLength = answerLength;
@@ -20,15 +21,19 @@ public class GameManager {
         }
     }
 
-    public boolean guess(char enteredLetter) {
+    public int guess(String enteredString) {
+        if (!isCharacterEntered(enteredString)) {
+            return -1;
+        }
+        char enteredLetter = enteredString.charAt(0);
         attempts++;
-        boolean hit = false;
+        int hit = 0;
         for (int i = 0; i < answerLength; i++) {
             if (enteredLetter == answer[i]) {
                 if (!(userAnswer[i] == enteredLetter)) {
                     userAnswer[i] = enteredLetter;
                     countKnownSymbols++;
-                    hit = true;
+                    hit = 1;
                 }
             }
         }
@@ -50,4 +55,22 @@ public class GameManager {
     public boolean isPlayerWon() {
         return countKnownSymbols == answerLength;
     }
+
+    public boolean isGameStopped() {
+        return gameStopped;
+    }
+
+    private boolean isCharacterEntered(String enteredString) {
+        if (enteredString.equals("stop")) {
+            gameStopped = true;
+            return false;
+        } else {
+            return enteredString.length() == 1;
+        }
+    }
+
+    public boolean isAnswerCorrect() {
+        return answerLength > 0;
+    }
+
 }

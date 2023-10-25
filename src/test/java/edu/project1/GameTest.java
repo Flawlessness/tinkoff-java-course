@@ -1,47 +1,96 @@
 package edu.project1;
 
-import org.junit.jupiter.api.Assertions;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.StringReader;
 
 public class GameTest {
     @Test
-    @DisplayName("Checking correct operation")
-    void correctOperationTest() throws IOException {
-        String userInput = """
-            a
-            b
-            b
-            abb
-            f
-            l
-            o
-            w
-            """;
-        String dictionary = """
-            1
-            flow
-            """;
-        Reader dictionaryReader = new StringReader(dictionary);
-        InputStream is = new ByteArrayInputStream(userInput.getBytes());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(baos);
+    @DisplayName("Checking the change in the number of attempts in case of an incorrect answer")
+    void incorrectAnswerAttemptsTest() {
+        String randomWord = "b";
+        GameManager gameManager = new GameManager(randomWord, randomWord.length());
 
-        System.setIn(is);
-        System.setOut(ps);
-        Game game = new Game(dictionaryReader);
-        game.run();
-        System.out.flush();
+        gameManager.guess("a");
 
-        String[] output = baos.toString().split("\n");
-        Assertions.assertEquals(" \u001B[32mTotal attempts: 7\u001B[m", output[output.length - 1].split("--")[1]);
+        assertThat(gameManager.getAttempts()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("Checking the change in the number of attempts in case of a correct answer")
+    void correctAnswerAttemptsTest() {
+        String randomWord = "b";
+        GameManager gameManager = new GameManager(randomWord, randomWord.length());
+
+        gameManager.guess("b");
+
+        assertThat(gameManager.getAttempts()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Checking that the game state does not change if the character is entered incorrectly")
+    void incorrectCharacterTest() {
+        String randomWord = "ab";
+        GameManager gameManager = new GameManager(randomWord, randomWord.length());
+
+        gameManager.guess("ab");
+
+        assertThat(gameManager.getAttempts()).isEqualTo(0);
+        assertThat(gameManager.getUserAnswer()).isEqualTo("**");
+    }
+
+    @Test
+    @DisplayName("Checking the player's winnings when guessing all the letters")
+    void playerWonTest() {
+        String randomWord = "ab";
+        GameManager gameManager = new GameManager(randomWord, randomWord.length());
+
+        gameManager.guess("b");
+        gameManager.guess("a");
+
+        assertThat(gameManager.isPlayerWon()).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("Checking the correct change of the game state with the correct answer")
+    void gameStateCorrectAnswerTest() {
+        String randomWord = "ab";
+        GameManager gameManager = new GameManager(randomWord, randomWord.length());
+
+        gameManager.guess("b");
+
+        assertThat(gameManager.getUserAnswer()).isEqualTo("*b");
+    }
+    @Test
+    @DisplayName("Checking the correct change of the game state in case of an incorrect answer")
+    void gameStateIncorrectAnswerTest() {
+        String randomWord = "ab";
+        GameManager gameManager = new GameManager(randomWord, randomWord.length());
+
+        gameManager.guess("c");
+
+        assertThat(gameManager.getUserAnswer()).isEqualTo("**");
+    }
+
+    @Test
+    @DisplayName("Checking the correct format of the guessed word")
+    void correctFormatRandomWordTest() {
+        String randomWord = "";
+        GameManager gameManager = new GameManager(randomWord, 0);
+
+        assertThat(gameManager.isAnswerCorrect()).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("Checking that the player loses when the maximum number of attempts is reached")
+    void playerLoseTest() {
+        String randomWord = "a";
+        GameManager gameManager = new GameManager(randomWord, randomWord.length());
+
+        gameManager.guess("b");
+        gameManager.guess("c");
+
+        assertThat(gameManager.isPlayerWon()).isEqualTo(false);
+        assertThat(gameManager.getAttempts()).isEqualTo(randomWord.length()*2);
+    }
 }
