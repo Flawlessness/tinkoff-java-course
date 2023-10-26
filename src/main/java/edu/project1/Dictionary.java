@@ -24,7 +24,4 @@ public class Dictionary {
         return randomWord;
     }
 
-    public int getRandomWordLength() {
-        return randomWord.length();
-    }
 }

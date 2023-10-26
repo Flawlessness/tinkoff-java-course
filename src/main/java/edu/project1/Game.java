@@ -12,7 +12,7 @@ public class Game {
 
     public Game(Reader dictionaryReader) {
         dictionary = new Dictionary(dictionaryReader);
-        gameManager = new GameManager(dictionary.getRandomWord(), dictionary.getRandomWordLength());
+        gameManager = new GameManager(dictionary.getRandomWord());
     }
 
     public void run() {
@@ -22,19 +22,22 @@ public class Game {
         }
         Scanner scanner = new Scanner(System.in);
         String enteredString;
-        int returnCode;
+        ReturnCode returnCode = null;
 
-        while (!gameManager.isPlayerWon() && (gameManager.getAttempts() != gameManager.getMaxAttempts())
-            && !gameManager.isGameStopped()) {
+        while (!gameManager.isPlayerWon() && (gameManager.getAttempts() != gameManager.getMaxAttempts())) {
             LOGGER.info("Guess a letter:");
             enteredString = scanner.nextLine();
 
             returnCode = gameManager.guess(enteredString);
-            if (returnCode == -1) {
+            if (returnCode == ReturnCode.ERROR) {
                 continue;
             }
 
-            if (returnCode == 1) {
+            if (returnCode == ReturnCode.STOP) {
+                break;
+            }
+
+            if (returnCode == ReturnCode.HIT) {
                 LOGGER.info("Hit!");
             } else {
                 LOGGER.info(
@@ -45,7 +48,7 @@ public class Game {
             }
             LOGGER.info("The word: {}", gameManager.getUserAnswer());
         }
-        if (gameManager.isGameStopped()) {
+        if (returnCode == ReturnCode.STOP) {
             LOGGER.info("The game is stopped.");
         } else {
             if (gameManager.isPlayerWon()) {
@@ -56,5 +59,12 @@ public class Game {
             }
 
         }
+    }
+
+    public enum ReturnCode {
+        STOP,
+        HIT,
+        MISS,
+        ERROR
     }
 }

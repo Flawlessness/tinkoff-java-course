@@ -3,37 +3,52 @@ package edu.project1;
 public class GameManager {
     private final int attemptRate = 2;
     private final char[] answer;
-    private final int maxAttempts;
+    private int maxAttempts;
     private final int answerLength;
     private int attempts;
     private final char[] userAnswer;
     private int countKnownSymbols;
-    private boolean gameStopped;
 
-    public GameManager(String answer, int answerLength) {
-        this.answerLength = answerLength;
+    public GameManager(String answer) {
+        this.answerLength = answer.length();
         this.answer = answer.toCharArray();
-        this.maxAttempts = answerLength * attemptRate;
         this.userAnswer = answer.toCharArray();
         this.countKnownSymbols = 0;
+        init();
+    }
+
+    private void init() {
+        this.maxAttempts = answerLength * attemptRate;
         for (int i = 0; i < answerLength; i++) {
             userAnswer[i] = '*';
         }
     }
 
-    public int guess(String enteredString) {
-        if (!isCharacterEntered(enteredString)) {
-            return -1;
+    public Game.ReturnCode guess(String enteredString) {
+        if (enteredString.equals("stop")) {
+            return Game.ReturnCode.STOP;
+        } else if (enteredString.length() != 1) {
+            return Game.ReturnCode.ERROR;
         }
-        char enteredLetter = enteredString.charAt(0);
+
         attempts++;
-        int hit = 0;
+
+        if (isHit(enteredString)) {
+            return Game.ReturnCode.HIT;
+        }
+
+        return Game.ReturnCode.MISS;
+    }
+
+    public boolean isHit(String enteredString) {
+        boolean hit = false;
+        char enteredLetter = enteredString.charAt(0);
         for (int i = 0; i < answerLength; i++) {
             if (enteredLetter == answer[i]) {
                 if (!(userAnswer[i] == enteredLetter)) {
                     userAnswer[i] = enteredLetter;
                     countKnownSymbols++;
-                    hit = 1;
+                    hit = true;
                 }
             }
         }
@@ -54,19 +69,6 @@ public class GameManager {
 
     public boolean isPlayerWon() {
         return countKnownSymbols == answerLength;
-    }
-
-    public boolean isGameStopped() {
-        return gameStopped;
-    }
-
-    private boolean isCharacterEntered(String enteredString) {
-        if (enteredString.equals("stop")) {
-            gameStopped = true;
-            return false;
-        } else {
-            return enteredString.length() == 1;
-        }
     }
 
     public boolean isAnswerCorrect() {
