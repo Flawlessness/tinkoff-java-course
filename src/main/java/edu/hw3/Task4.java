@@ -3,8 +3,11 @@ package edu.hw3;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@SuppressWarnings("MagicNumber")
+
 public class Task4 {
     private static final LinkedHashMap<String, Integer> ROMAN_NUMERALS;
+
     static {
         ROMAN_NUMERALS = new LinkedHashMap<>();
         ROMAN_NUMERALS.put("M", 1000);

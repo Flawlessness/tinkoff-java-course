@@ -1,10 +1,10 @@
 package edu.hw3;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 public class Task5 {
     private static final String ASC_FLAG = "ASC";
