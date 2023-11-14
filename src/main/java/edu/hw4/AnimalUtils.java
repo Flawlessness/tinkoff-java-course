@@ -70,6 +70,9 @@ public class AnimalUtils {
     }
 
     public static Animal findOldestAnimal(List<Animal> animalsList, Integer k) {
+        if (animalsList.isEmpty()) {
+            throw new IllegalArgumentException("empty list");
+        }
         return animalsList
             .stream()
             .sorted(Comparator.comparingInt(Animal::age).reversed())
