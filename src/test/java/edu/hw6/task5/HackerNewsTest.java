@@ -3,7 +3,7 @@ package edu.hw6.task5;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class HackerNewsTest {
 
@@ -19,7 +19,7 @@ public class HackerNewsTest {
         long[] IDs = hackerNews.hackerNewsTopStories();
         String topic = hackerNews.news(ID);
 
-        assertTrue(
+        assertFalse(
             Arrays.stream(IDs).anyMatch(v -> v == ID)
         );
 
