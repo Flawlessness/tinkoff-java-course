@@ -73,6 +73,9 @@ public class AnimalUtils {
         if (animalsList.isEmpty()) {
             throw new IllegalArgumentException("empty list");
         }
+        if (animalsList.size() < k) {
+            throw new IllegalArgumentException("animals list size < k");
+        }
         return animalsList
             .stream()
             .sorted(Comparator.comparingInt(Animal::age).reversed())
