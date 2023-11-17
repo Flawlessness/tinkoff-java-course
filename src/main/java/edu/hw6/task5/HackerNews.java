@@ -26,8 +26,8 @@ public class HackerNews {
     private static final int REQUEST_DURATION = 10;
 
     public String news(long id) {
-        HttpClient client = newHttpClient();
-        try {
+
+        try (HttpClient client = newHttpClient()) {
 
             HttpRequest request = httpRequestOf(
                 new URI(BASE_ITEM_URL.formatted(id))
@@ -49,8 +49,7 @@ public class HackerNews {
     }
 
     public long[] hackerNewsTopStories() {
-        HttpClient client = newHttpClient();
-        try {
+        try (HttpClient client = newHttpClient()) {
 
             HttpRequest request = httpRequestOf(
                 new URI(BASE_STORIES_URL)
