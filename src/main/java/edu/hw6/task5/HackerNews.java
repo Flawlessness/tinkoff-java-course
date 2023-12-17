@@ -1,6 +1,8 @@
 package edu.hw6.task5;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -25,20 +27,36 @@ public class HackerNews {
         = "https://hacker-news.firebaseio.com/v0/topstories.json";
     private static final int REQUEST_DURATION = 10;
 
+    private String getBody1(HttpClient client, long id) throws IOException, InterruptedException, URISyntaxException {
+        HttpRequest request = httpRequestOf(
+            new URI(BASE_ITEM_URL.formatted(id))
+        );
+
+        var response = client.send(
+            request,
+            HttpResponse.BodyHandlers.ofString()
+        );
+
+        return response.body();
+    }
+
+    private String getBody2(HttpClient client) throws IOException, InterruptedException, URISyntaxException {
+        HttpRequest request = httpRequestOf(
+            new URI(BASE_STORIES_URL)
+        );
+
+        var response = client.send(
+            request,
+            HttpResponse.BodyHandlers.ofString()
+        );
+
+        return response.body();
+    }
     public String news(long id) {
 
         try (HttpClient client = newHttpClient()) {
 
-            HttpRequest request = httpRequestOf(
-                new URI(BASE_ITEM_URL.formatted(id))
-            );
-
-            var response = client.send(
-                request,
-                HttpResponse.BodyHandlers.ofString()
-            );
-
-            String body = response.body();
+            String body = getBody1(client, id);
 
             return parseTitle(body);
 
@@ -51,16 +69,7 @@ public class HackerNews {
     public long[] hackerNewsTopStories() {
         try (HttpClient client = newHttpClient()) {
 
-            HttpRequest request = httpRequestOf(
-                new URI(BASE_STORIES_URL)
-            );
-
-            var response = client.send(
-                request,
-                HttpResponse.BodyHandlers.ofString()
-            );
-
-            String body = response.body();
+            String body = getBody2(client);
 
             return parseStringToLongArray(body);
 
