@@ -52,6 +52,7 @@ public class HackerNews {
 
         return response.body();
     }
+
     public String news(long id) {
 
         try (HttpClient client = newHttpClient()) {
@@ -85,11 +86,11 @@ public class HackerNews {
         }
 
         return Arrays.stream(
-            rawLongArray.substring(
-                    1,
-                    rawLongArray.length() - 1
-                )
-                .split(LONG_ARRAY_STRING_SEPARATOR)
+                rawLongArray.substring(
+                        1,
+                        rawLongArray.length() - 1
+                    )
+                    .split(LONG_ARRAY_STRING_SEPARATOR)
             )
             .mapToLong(Long::valueOf)
             .toArray();
